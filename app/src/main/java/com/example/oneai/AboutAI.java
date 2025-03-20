@@ -15,11 +15,11 @@ import com.google.android.datatransport.backend.cct.BuildConfig;
 public class AboutAI extends AppCompatActivity {
 
     // GitHub repository URL - Replace with your actual GitHub repo URL
-    private static final String GITHUB_URL = "https://github.com/yourusername/OneAI";
+    private static final String GITHUB_URL = "https://github.com/Rosh-Dav/AI-Assistant";
     // Developer email
     private static final String DEVELOPER_EMAIL = "yadavisroshan0007@gmail.com";
     // Issues URL - Usually points to the issues section of your GitHub repo
-    private static final String ISSUES_URL = "https://github.com/yourusername/OneAI/issues";
+    private static final String ISSUES_URL = "https://github.com/Rosh-Dav/AI-Assistant";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +70,7 @@ public class AboutAI extends AppCompatActivity {
         });
     }
 
-    /**
-     * Opens the specified URL in the device's browser
-     * @param url URL to open
-     */
+
     private void openUrl(String url) {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -84,9 +81,6 @@ public class AboutAI extends AppCompatActivity {
         }
     }
 
-    /**
-     * Opens email app with pre-filled subject
-     */
     private void sendEmail() {
         try {
             Intent intent = new Intent(Intent.ACTION_SENDTO);

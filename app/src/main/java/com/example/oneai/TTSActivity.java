@@ -16,7 +16,6 @@ import java.util.ArrayList;
 public class TTSActivity extends AppCompatActivity {
 
     private EditText transcribeArea;
-    private Button listenButton, stopButton, clearButton;
     private SpeechRecognizer speechRecognizer;
     private Intent recognizerIntent;
 
@@ -25,22 +24,34 @@ public class TTSActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ttsactivity);
 
-        // Initialize views
-        transcribeArea = findViewById(R.id.transcribe_area);
-        listenButton = findViewById(R.id.listen_button);
-        stopButton = findViewById(R.id.stop_button);
-        clearButton = findViewById(R.id.clear_button);
+        initializeViews();
+        setupSpeechRecognition();
+        setupButtonListeners();
+    }
 
-        // Initialize SpeechRecognizer
+    private void initializeViews() {
+        transcribeArea = findViewById(R.id.transcribe_area);
+        Button listenButton = findViewById(R.id.listen_button);
+        Button stopButton = findViewById(R.id.stop_button);
+        Button clearButton = findViewById(R.id.clear_button);
+
+        listenButton.setOnClickListener(v -> startListening());
+        stopButton.setOnClickListener(v -> stopListening());
+        clearButton.setOnClickListener(v -> transcribeArea.setText(""));
+    }
+
+    private void setupSpeechRecognition() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 
-        // Initialize RecognizerIntent
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
 
-        // Set up SpeechRecognizer listener
-        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+        speechRecognizer.setRecognitionListener(createRecognitionListener());
+    }
+
+    private RecognitionListener createRecognitionListener() {
+        return new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle params) {
                 Toast.makeText(TTSActivity.this, "Listening...", Toast.LENGTH_SHORT).show();
@@ -67,6 +78,7 @@ public class TTSActivity extends AppCompatActivity {
 
             @Override
             public void onResults(Bundle results) {
+                // Process speech recognition results
                 ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if (matches != null && !matches.isEmpty()) {
                     String newText = matches.get(0);
@@ -80,16 +92,11 @@ public class TTSActivity extends AppCompatActivity {
 
             @Override
             public void onEvent(int eventType, Bundle params) {}
-        });
+        };
+    }
 
-        // Listen button functionality
-        listenButton.setOnClickListener(v -> startListening());
-
-        // Stop button functionality
-        stopButton.setOnClickListener(v -> stopListening());
-
-        // Clear button functionality
-        clearButton.setOnClickListener(v -> transcribeArea.setText(""));
+    private void setupButtonListeners() {
+        // Now handled in initializeViews for better organization
     }
 
     private void startListening() {

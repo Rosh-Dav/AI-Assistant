@@ -19,7 +19,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_AI = 2;
 
     private final List<Message> messages = new ArrayList<>();
-    private Markwon markwon; // Markwon instance for rendering Markdown
+    private Markwon markwon;
 
     public ChatAdapter(Markwon markwon) {
         this.markwon = markwon;
@@ -97,7 +97,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         void bind(String text) {
-            // Use Markwon to render Markdown text
             markwon.setMarkdown(messageText, text);
         }
     }

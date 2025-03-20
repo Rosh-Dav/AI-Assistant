@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
@@ -28,10 +26,9 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_SPEECH_INPUT = 1;
-
     private static final int REQUEST_CODE_NOTE_CONTENT = 2;
-
     private static final int REQUEST_STORAGE_PERMISSION = 3;
+
     private String pendingNoteTimestamp;
     private TextView commandHistory;
     private ArrayList<String> commandList;
@@ -42,36 +39,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize command history and command list
         commandHistory = findViewById(R.id.commandHistory);
         commandList = new ArrayList<>();
-
-        // Initialize media player
         mediaPlayer = new MediaPlayer();
 
-        // Initializing buttons
-        Button ttsButton = findViewById(R.id.tts_button);
-        Button newsButton = findViewById(R.id.news_button);
-        Button mathButton = findViewById(R.id.math_calculation_button);
-        Button translationButton = findViewById(R.id.language_translation_button);
-        Button smsButton = findViewById(R.id.send_sms_button);
-        Button emailButton = findViewById(R.id.send_email_button);
-        Button weatherButton = findViewById(R.id.weather_update_button);
-        Button speakButton = findViewById(R.id.voice_command_button);
-        ImageButton ImageOneAI = findViewById(R.id.imgViewOneAI);// Speak button
+        initializeButtons();
+    }
 
-        // Setting click listeners
-        ttsButton.setOnClickListener(view -> openActivity(TTSActivity.class));
-        newsButton.setOnClickListener(view -> openActivity(ChatBot.class));
-        mathButton.setOnClickListener(view -> openActivity(MathCalculationActivity.class));
-        translationButton.setOnClickListener(view -> openActivity(LanguageTranslationActivity.class));
-        smsButton.setOnClickListener(view -> openActivity(SendSMSActivity.class));
-        emailButton.setOnClickListener(view -> openActivity(SendEmailActivity.class));
-        weatherButton.setOnClickListener(view -> openActivity(WeatherUpdateActivity.class));
-        ImageOneAI.setOnClickListener(view -> openActivity(AboutAI.class));
-
-        // Speak button functionality
-        speakButton.setOnClickListener(view -> startVoiceRecognition());
+    private void initializeButtons() {
+        findViewById(R.id.tts_button).setOnClickListener(view -> openActivity(TTSActivity.class));
+        findViewById(R.id.news_button).setOnClickListener(view -> openActivity(ChatBot.class));
+        findViewById(R.id.math_calculation_button).setOnClickListener(view -> openActivity(MathCalculationActivity.class));
+        findViewById(R.id.language_translation_button).setOnClickListener(view -> openActivity(LanguageTranslationActivity.class));
+        findViewById(R.id.send_sms_button).setOnClickListener(view -> openActivity(SendSMSActivity.class));
+        findViewById(R.id.send_email_button).setOnClickListener(view -> openActivity(SendEmailActivity.class));
+        findViewById(R.id.weather_update_button).setOnClickListener(view -> openActivity(WeatherUpdateActivity.class));
+        findViewById(R.id.imgViewOneAI).setOnClickListener(view -> openActivity(AboutAI.class));
+        findViewById(R.id.voice_command_button).setOnClickListener(view -> startVoiceRecognition());
     }
 
     @Override
@@ -83,13 +67,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Method to open new activities
     private void openActivity(Class<?> activityClass) {
-        Intent intent = new Intent(MainActivity.this, activityClass);
-        startActivity(intent);
+        startActivity(new Intent(MainActivity.this, activityClass));
     }
 
-    // Method to start voice recognition
     private void startVoiceRecognition() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -102,41 +83,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Handling speech input results
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data != null) {
-            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (results != null && !results.isEmpty()) {
-                String command = results.get(0).toLowerCase();
-                String timestamp = getCurrentTimeAndDate();
-                handleVoiceCommand(command, timestamp);
-            }
-        }
-        else if (requestCode == REQUEST_CODE_NOTE_CONTENT && resultCode == RESULT_OK && data != null) {
-            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (results != null && !results.isEmpty()) {
-                String noteContent = results.get(0);
-                File savedNote = saveNote(noteContent, pendingNoteTimestamp);
+        if (resultCode != RESULT_OK || data == null) return;
 
-                if (savedNote != null) {
-                    // Successfully saved the note
-                    String resultMessage = "Note saved successfully: " + savedNote.getName();
-                    addCommandToHistory("Note taken -> " + resultMessage + " [" + pendingNoteTimestamp + "]");
+        List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        if (results == null || results.isEmpty()) return;
 
-                } else {
-                    // Failed to save the note
-                    addCommandToHistory("Note taken -> Failed to save note [" + pendingNoteTimestamp + "]");
-                }
-            }
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
+            String command = results.get(0).toLowerCase();
+            handleVoiceCommand(command, getCurrentTimeAndDate());
+        } else if (requestCode == REQUEST_CODE_NOTE_CONTENT) {
+            handleNoteContent(results.get(0));
         }
     }
 
+    private void handleNoteContent(String noteContent) {
+        File savedNote = saveNote(noteContent, pendingNoteTimestamp);
+        String resultMessage = savedNote != null
+                ? "Note saved successfully: " + savedNote.getName()
+                : "Failed to save note";
 
+        addCommandToHistory("Note taken -> " + resultMessage + " [" + pendingNoteTimestamp + "]");
+    }
 
-    // Handling voice commands with timestamp
     private void handleVoiceCommand(String command, String timestamp) {
         String response;
 
@@ -183,13 +155,10 @@ public class MainActivity extends AppCompatActivity {
             openGallery();
             response = "Opening Gallery";
         } else if (command.contains("call")) {
-            // Extract the phone number from the command
             String phoneNumber = extractPhoneNumber(command);
-            if (phoneNumber != null && !phoneNumber.isEmpty()) {
-                response = makePhoneCall(phoneNumber, timestamp);
-            } else {
-                response = "Could not identify a valid phone number";
-            }
+            response = (phoneNumber != null && !phoneNumber.isEmpty())
+                    ? makePhoneCall(phoneNumber, timestamp)
+                    : "Could not identify a valid phone number";
         } else if (command.contains("open files")) {
             openFiles();
             response = "Opening Files";
@@ -199,20 +168,16 @@ public class MainActivity extends AppCompatActivity {
         } else if (command.contains("take note")) {
             startNoteCapture(timestamp);
             response = "Ready to take your note. Please speak";
-        }  else {
+        } else {
             response = "Command not recognized.";
         }
 
         addCommandToHistory(command + " -> " + response + " [" + timestamp + "]");
     }
 
-    // Method to initiate note capture
     private void startNoteCapture(String timestamp) {
-
-        // Save the timestamp for when we save the note
         pendingNoteTimestamp = timestamp;
 
-        // Start speech recognition for note content
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
@@ -225,24 +190,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Play a small beep sound to indicate note taking is starting
-
-    // Method to save note to a file
     private File saveNote(String noteContent, String timestamp) {
         try {
-            // Create a filename based on the timestamp
             String filename = "Note_" + timestamp.replace(" ", "_").replace(":", "-") + ".txt";
-
-            // Get the Downloads directory
             File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
             if (!downloadsDir.exists()) {
                 downloadsDir.mkdirs();
             }
 
-            // Create the note file in Downloads
             File noteFile = new File(downloadsDir, filename);
-
-            // Write the content to the file
             FileWriter writer = new FileWriter(noteFile);
             writer.write(noteContent);
             writer.close();
@@ -253,10 +210,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-    // Unified method to open apps with fallback
     private void openAppWithPackage(String packageName, String uriString) {
         try {
             Intent intent;
@@ -264,8 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uriString));
                 intent.setPackage(packageName);
             } else {
-                PackageManager pm = getPackageManager();
-                intent = pm.getLaunchIntentForPackage(packageName);
+                intent = getPackageManager().getLaunchIntentForPackage(packageName);
             }
 
             if (intent != null) {
@@ -278,13 +230,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Method to extract phone number from voice command
+    // Extract numbers from command for phone calls
     private String extractPhoneNumber(String command) {
-        // Remove the "call" word and any leading/trailing spaces
         String processed = command.replace("call", "").trim();
-
-        // Pattern to match digits only, removing any spaces or special characters
         StringBuilder phoneNumber = new StringBuilder();
+
         for (char c : processed.toCharArray()) {
             if (Character.isDigit(c)) {
                 phoneNumber.append(c);
@@ -294,15 +244,11 @@ public class MainActivity extends AppCompatActivity {
         return phoneNumber.toString();
     }
 
-    // Method to initiate a phone call
     private String makePhoneCall(String phoneNumber, String timestamp) {
         try {
-            // Check for call permission at runtime if targeting Android 6.0+
-            // This is a simplified version - you should implement proper permission handling
             Intent callIntent = new Intent(Intent.ACTION_CALL);
             callIntent.setData(Uri.parse("tel:" + phoneNumber));
 
-            // Check if the device can handle the call intent
             if (callIntent.resolveActivity(getPackageManager()) != null) {
                 startActivity(callIntent);
                 return "Calling " + phoneNumber;
@@ -315,11 +261,13 @@ public class MainActivity extends AppCompatActivity {
             return "Error making call: " + e.getMessage();
         }
     }
+
     private void openInPlayStore(String packageName) {
         try {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
         } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
         }
     }
 
@@ -368,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             if (mediaPlayer != null) {
                 mediaPlayer.reset();
-                mediaPlayer = MediaPlayer.create(this, R.raw.poc); // Replace with your actual file
+                mediaPlayer = MediaPlayer.create(this, R.raw.poc);
                 mediaPlayer.start();
                 return "Playing music";
             }
@@ -392,8 +340,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getCurrentTimeAndDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return sdf.format(new Date());
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
     }
 
     private void addCommandToHistory(String entry) {
@@ -408,6 +355,4 @@ public class MainActivity extends AppCompatActivity {
         }
         commandHistory.setText(history.toString());
     }
-
-
 }

@@ -9,7 +9,6 @@ import android.speech.tts.TextToSpeech;
 import android.telephony.SmsManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -27,35 +26,48 @@ public class SendSMSActivity extends AppCompatActivity {
     private static final int VOICE_RECOGNITION_REQUEST_MESSAGE = 103;
 
     private EditText phoneNumberInput, messageInput;
-    private Button sendButton, voiceInputButton;
     private TextToSpeech textToSpeech;
-
-    private String phoneNumber = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_smsactivity);
 
+        initializeViews();
+        initializeTextToSpeech();
+        checkSmsPermission();
+        setupButtonListeners();
+    }
+
+    private void initializeViews() {
         phoneNumberInput = findViewById(R.id.phone_number_input);
         messageInput = findViewById(R.id.message_input);
-        sendButton = findViewById(R.id.send_button);
-        voiceInputButton = findViewById(R.id.voice_input_button);
+    }
 
-        // Initialize TextToSpeech
+    private void initializeTextToSpeech() {
         textToSpeech = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
                 textToSpeech.setLanguage(Locale.getDefault());
             }
         });
+    }
 
-        // Check and request SMS permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SMS_PERMISSION_REQUEST);
+    private void checkSmsPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    SMS_PERMISSION_REQUEST
+            );
         }
+    }
+
+    private void setupButtonListeners() {
+        Button sendButton = findViewById(R.id.send_button);
+        Button voiceInputButton = findViewById(R.id.voice_input_button);
 
         sendButton.setOnClickListener(v -> sendSms());
-
         voiceInputButton.setOnClickListener(v -> askForPhoneNumber());
     }
 
@@ -81,30 +93,28 @@ public class SendSMSActivity extends AppCompatActivity {
 
     private void askForPhoneNumber() {
         speak("Which number do you want to send the message to?");
-
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Which number do you want to send the message to?");
-
-        try {
-            startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_PHONE);
-        } catch (Exception e) {
-            Toast.makeText(this, "Voice recognition not supported", Toast.LENGTH_SHORT).show();
-            speak("Voice recognition is not supported on your device.");
-        }
+        startVoiceRecognition(
+                "Which number do you want to send the message to?",
+                VOICE_RECOGNITION_REQUEST_PHONE
+        );
     }
 
     private void askForMessage() {
         speak("Speak the message you want to send.");
+        startVoiceRecognition(
+                "Speak the message you want to send.",
+                VOICE_RECOGNITION_REQUEST_MESSAGE
+        );
+    }
 
+    private void startVoiceRecognition(String prompt, int requestCode) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak the message you want to send.");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
 
         try {
-            startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_MESSAGE);
+            startActivityForResult(intent, requestCode);
         } catch (Exception e) {
             Toast.makeText(this, "Voice recognition not supported", Toast.LENGTH_SHORT).show();
             speak("Voice recognition is not supported on your device.");
@@ -119,13 +129,13 @@ public class SendSMSActivity extends AppCompatActivity {
             ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
             if (results != null && !results.isEmpty()) {
+                String recognizedText = results.get(0);
+
                 if (requestCode == VOICE_RECOGNITION_REQUEST_PHONE) {
-                    phoneNumber = results.get(0);
-                    phoneNumberInput.setText(phoneNumber);
+                    phoneNumberInput.setText(recognizedText);
                     askForMessage();
                 } else if (requestCode == VOICE_RECOGNITION_REQUEST_MESSAGE) {
-                    String message = results.get(0);
-                    messageInput.setText(message);
+                    messageInput.setText(recognizedText);
                     Toast.makeText(this, "Ready to send the SMS", Toast.LENGTH_SHORT).show();
                     speak("Your message is ready to send.");
                 }

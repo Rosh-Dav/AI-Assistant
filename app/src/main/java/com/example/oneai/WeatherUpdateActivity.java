@@ -82,7 +82,7 @@ public class WeatherUpdateActivity extends AppCompatActivity {
                 ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if (matches != null && !matches.isEmpty()) {
                     cityEditText.setText(matches.get(0));
-                    getWeather(); // Automatically fetch weather after voice input
+                    getWeather();
                 }
             }
 
@@ -103,27 +103,18 @@ public class WeatherUpdateActivity extends AppCompatActivity {
             return;
         }
 
-        // wttr.in API URL with detailed weather data format
         String url = "https://wttr.in/" + city + "?format=%C+%t+%w+%h+%P+%m";
-        // %C = Condition, %t = Temperature, %w = Wind, %h = Humidity, %P = Pressure, %m = Moon phase
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Format the data nicely with symbols
-                        String result = formatWeatherData(city, response);
-                        weatherDetailsTextView.setText(result);
-                        scrollView.fullScroll(ScrollView.FOCUS_UP); // Scroll to the top
-                    }
+                response -> {
+                    String result = formatWeatherData(city, response);
+                    weatherDetailsTextView.setText(result);
+                    scrollView.fullScroll(ScrollView.FOCUS_UP);
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(WeatherUpdateActivity.this, "Error fetching weather data", Toast.LENGTH_SHORT).show();
-                        Log.e("Weather Error", "Error: " + error.getMessage());
-                    }
+                error -> {
+                    Toast.makeText(WeatherUpdateActivity.this, "Error fetching weather data", Toast.LENGTH_SHORT).show();
+                    Log.e("Weather Error", "Error: " + error.getMessage());
                 }
         );
 
@@ -131,22 +122,19 @@ public class WeatherUpdateActivity extends AppCompatActivity {
     }
 
     private String formatWeatherData(String city, String rawData) {
-        // Split the raw data received from API
         String[] weatherDetails = rawData.split(" ");
 
         // Extract individual weather components
-        String condition = weatherDetails[0];  // Weather condition
-        String temperature = weatherDetails[1]; // Temperature
-        String wind = weatherDetails[2]; // Wind speed and direction
-        String humidity = weatherDetails[3]; // Humidity
-        String pressure = weatherDetails[4]; // Pressure
-        String moonPhase = weatherDetails[5]; // Moon phase
+        String condition = weatherDetails[0];
+        String temperature = weatherDetails[1];
+        String wind = weatherDetails[2];
+        String humidity = weatherDetails[3];
+        String pressure = weatherDetails[4];
+        String moonPhase = weatherDetails[5];
 
-        // Add weather symbols
         String conditionSymbol = getConditionSymbol(condition);
-        String windSymbol = "🌬";  // Wind symbol
+        String windSymbol = "🌬";
 
-        // Use StringBuilder for better string concatenation
         StringBuilder weatherData = new StringBuilder();
 
         weatherData.append("Weather in ").append(city).append(":\n\n");
@@ -163,28 +151,28 @@ public class WeatherUpdateActivity extends AppCompatActivity {
     private String getConditionSymbol(String condition) {
         switch (condition.toLowerCase()) {
             case "clear":
-                return "☀";  // Sun for clear weather
+                return "☀";
             case "rain":
-                return "🌧";  // Cloud with rain for rainy weather
+                return "🌧";
             case "cloudy":
-                return "☁";  // Cloud for cloudy weather
+                return "☁";
             case "snow":
-                return "❄";  // Snowflake for snowy weather
+                return "❄";
             default:
-                return "🌤";  // Default symbol for other conditions
+                return "🌤";
         }
     }
 
     private String getMoonPhaseSymbol(String moonPhase) {
         switch (moonPhase.toLowerCase()) {
             case "waxing crescent":
-                return "🌒";  // Waxing Crescent moon phase
+                return "🌒";
             case "full moon":
-                return "🌕";  // Full moon phase
+                return "🌕";
             case "waning crescent":
-                return "🌘";  // Waning Crescent moon phase
+                return "🌘";
             default:
-                return "🌑";  // Default symbol for other moon phases
+                return "🌑";
         }
     }
 }

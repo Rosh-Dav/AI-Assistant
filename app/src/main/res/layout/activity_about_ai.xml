@@ -183,7 +183,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Convert speech to text accurately with our advanced transcription technology."
+                android:text="Convert speech to text accurately."
                 android:textSize="14sp"
                 android:textColor="@android:color/white" />
           </LinearLayout>
@@ -220,7 +220,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Solve complex mathematical problems and equations with ease."
+                android:text="Solve mathematical problems and equations with ease."
                 android:textSize="14sp"
                 android:textColor="@android:color/white" />
           </LinearLayout>
@@ -331,7 +331,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Compose and send emails effortlessly with intelligent suggestions."
+                android:text="Compose and send emails effortlessly."
                 android:textSize="14sp"
                 android:textColor="@android:color/white" />
           </LinearLayout>
@@ -368,7 +368,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Get detailed weather information for any location with voice commands."
+                android:text="Get accurate weather information for any location with voice commands."
                 android:textSize="14sp"
                 android:textColor="@android:color/white" />
           </LinearLayout>
@@ -421,7 +421,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="16dp"
-              android:text="Your Name"
+              android:text="Roshan and Team"
               android:textSize="18sp"
               android:textStyle="bold"
               android:textColor="@android:color/white" />
@@ -432,7 +432,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Android Developer passionate about AI and machine learning technologies."
+            android:text="Android Apps Developer."
             android:textSize="16sp"
             android:textColor="@android:color/white" />
       </LinearLayout>

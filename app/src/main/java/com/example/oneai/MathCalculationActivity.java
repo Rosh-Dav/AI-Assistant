@@ -34,22 +34,17 @@ public class MathCalculationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_math_calculation);
 
-        // Initialize views from layout
         mathExpressionEditText = findViewById(R.id.inputLayout);
         resultTextView = findViewById(R.id.resultText);
         solveButton = findViewById(R.id.calculateButton);
 
         TextView textView = findViewById(R.id.documentationText);
 
-        // Load formatted text from strings.xml
+        // Load and display formatted HTML text from strings.xml
         String text = getString(R.string.math_operations);
-
-        // Display formatted text
         textView.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
 
-
-
-        // Set click listener for the solve button
+        // Solve button click listener
         solveButton.setOnClickListener(v -> {
             String expression = mathExpressionEditText.getText().toString();
             if (!expression.isEmpty()) {
@@ -59,13 +54,13 @@ public class MathCalculationActivity extends AppCompatActivity {
             }
         });
 
-        // Find the Help button in the toolbar and set click listener
+        // Help button click listener
         ImageButton helpButton = findViewById(R.id.helpButton);
         helpButton.setOnClickListener(v -> openHelpPdf());
     }
 
     private void solveMathExpression(String expression) {
-        // Retrofit setup for the Math API
+        // Retrofit setup for Math API
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.mathjs.org/v4/")
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -93,14 +88,11 @@ public class MathCalculationActivity extends AppCompatActivity {
 
     private void openHelpPdf() {
         try {
-            // Get the resource ID for the PDF in the raw folder
+            // Copy PDF from raw resources to app's files directory
             int resourceId = R.raw.helpmath;
-
-            // Create a temporary file to store the PDF
             File outputDir = getFilesDir();
             File outputFile = new File(outputDir, "helpmath.pdf");
 
-            // Copy the PDF from raw resources to the app's files directory if it doesn't exist
             if (!outputFile.exists()) {
                 InputStream in = getResources().openRawResource(resourceId);
                 FileOutputStream out = new FileOutputStream(outputFile);
@@ -114,17 +106,16 @@ public class MathCalculationActivity extends AppCompatActivity {
                 out.close();
             }
 
-            // Create a content URI using FileProvider
+            // Create a content URI for the PDF file
             Uri pdfUri = FileProvider.getUriForFile(
                     this,
                     "com.example.oneai.fileprovider",
                     outputFile);
 
-            // Create and launch the PDF viewer intent
+            // Launch PDF viewer intent
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(pdfUri, "application/pdf");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            // Remove FLAG_ACTIVITY_NO_HISTORY to keep the PDF viewer in the task stack
 
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);

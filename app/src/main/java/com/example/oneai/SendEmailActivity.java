@@ -23,35 +23,38 @@ public class SendEmailActivity extends AppCompatActivity {
     private static final int FILE_PICKER_REQUEST_CODE = 103;
 
     private EditText emailInput, messageInput;
-    private Button sendEmailButton, voiceInputButton, attachFileButton;
     private TextView attachedFileText;
     private TextToSpeech textToSpeech;
-
     private Uri attachedFileUri = null;
-    private String recipientEmail = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_email);
 
+        initializeViews();
+        setupTextToSpeech();
+        setupClickListeners();
+    }
+
+    private void initializeViews() {
         emailInput = findViewById(R.id.email_input);
         messageInput = findViewById(R.id.email_message_input);
-        sendEmailButton = findViewById(R.id.send_email_button);
-        voiceInputButton = findViewById(R.id.voice_input_button);
-        attachFileButton = findViewById(R.id.attach_file_button);
         attachedFileText = findViewById(R.id.attached_file_text);
+    }
 
-        // Initialize Text-to-Speech
+    private void setupTextToSpeech() {
         textToSpeech = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
                 textToSpeech.setLanguage(Locale.getDefault());
             }
         });
+    }
 
-        sendEmailButton.setOnClickListener(v -> sendEmail());
-        voiceInputButton.setOnClickListener(v -> askForEmail());
-        attachFileButton.setOnClickListener(v -> openFilePicker());
+    private void setupClickListeners() {
+        findViewById(R.id.send_email_button).setOnClickListener(v -> sendEmail());
+        findViewById(R.id.voice_input_button).setOnClickListener(v -> askForEmail());
+        findViewById(R.id.attach_file_button).setOnClickListener(v -> openFilePicker());
     }
 
     private void sendEmail() {
@@ -59,8 +62,7 @@ public class SendEmailActivity extends AppCompatActivity {
         String message = messageInput.getText().toString();
 
         if (email.isEmpty() || message.isEmpty()) {
-            Toast.makeText(this, "Please enter both email and message", Toast.LENGTH_SHORT).show();
-            speak("Please enter both email and message.");
+            showToastAndSpeak("Please enter both email and message.");
             return;
         }
 
@@ -76,41 +78,33 @@ public class SendEmailActivity extends AppCompatActivity {
 
         try {
             startActivity(Intent.createChooser(emailIntent, "Send Email"));
-            Toast.makeText(this, "Email sent successfully!", Toast.LENGTH_SHORT).show();
-            speak("Email sent successfully!");
+            showToastAndSpeak("Email sent successfully!");
         } catch (Exception e) {
-            Toast.makeText(this, "Failed to send email: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            speak("Failed to send email. Please try again.");
+            showToastAndSpeak("Failed to send email: " + e.getMessage());
         }
     }
 
     private void askForEmail() {
         speak("To whom do you want to send the email?");
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak the email address");
-
-        try {
-            startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_EMAIL);
-        } catch (Exception e) {
-            Toast.makeText(this, "Voice recognition not supported", Toast.LENGTH_SHORT).show();
-            speak("Voice recognition is not supported on your device.");
-        }
+        startVoiceRecognition("Speak the email address", VOICE_RECOGNITION_REQUEST_EMAIL);
     }
 
     private void askForMessage() {
         speak("What message do you want to send?");
+        startVoiceRecognition("Speak the message", VOICE_RECOGNITION_REQUEST_MESSAGE);
+    }
+
+    private void startVoiceRecognition(String prompt, int requestCode) {
+        // Set up voice recognition with appropriate parameters
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak the message");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
 
         try {
-            startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_MESSAGE);
+            startActivityForResult(intent, requestCode);
         } catch (Exception e) {
-            Toast.makeText(this, "Voice recognition not supported", Toast.LENGTH_SHORT).show();
-            speak("Voice recognition is not supported on your device.");
+            showToastAndSpeak("Voice recognition is not supported on your device.");
         }
     }
 
@@ -130,32 +124,41 @@ public class SendEmailActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == FILE_PICKER_REQUEST_CODE) {
-                attachedFileUri = data.getData();
-                attachedFileText.setText(attachedFileUri != null ? attachedFileUri.getLastPathSegment() : "File attached");
-                speak("File attached successfully.");
-            } else {
-                ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        if (resultCode != RESULT_OK || data == null) return;
 
-                if (results != null && !results.isEmpty()) {
-                    if (requestCode == VOICE_RECOGNITION_REQUEST_EMAIL) {
-                        recipientEmail = results.get(0);
-                        // Remove any unwanted spaces
-                        recipientEmail = recipientEmail.replaceAll("\\s+", "").trim();
-                        emailInput.setText(recipientEmail);
-                        askForMessage();
-                    } else if (requestCode == VOICE_RECOGNITION_REQUEST_MESSAGE) {
-                        String message = results.get(0);
-                        messageInput.setText(message);
-                        Toast.makeText(this, "Ready to send the email", Toast.LENGTH_SHORT).show();
-                        speak("Your email is ready to send.");
-                    }
-                }
-            }
+        if (requestCode == FILE_PICKER_REQUEST_CODE) {
+            handleFilePickerResult(data);
+        } else {
+            handleVoiceRecognitionResult(requestCode, data);
         }
     }
 
+    private void handleFilePickerResult(Intent data) {
+        attachedFileUri = data.getData();
+        attachedFileText.setText(attachedFileUri != null ? attachedFileUri.getLastPathSegment() : "File attached");
+        speak("File attached successfully.");
+    }
+
+    private void handleVoiceRecognitionResult(int requestCode, Intent data) {
+        ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+        if (results == null || results.isEmpty()) return;
+
+        if (requestCode == VOICE_RECOGNITION_REQUEST_EMAIL) {
+            // Clean up email by removing unwanted spaces
+            String email = results.get(0).replaceAll("\\s+", "").trim();
+            emailInput.setText(email);
+            askForMessage();
+        } else if (requestCode == VOICE_RECOGNITION_REQUEST_MESSAGE) {
+            messageInput.setText(results.get(0));
+            showToastAndSpeak("Your email is ready to send.");
+        }
+    }
+
+    private void showToastAndSpeak(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        speak(message);
+    }
 
     private void speak(String text) {
         if (textToSpeech != null) {

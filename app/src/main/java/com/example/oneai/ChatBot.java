@@ -49,10 +49,8 @@ public class ChatBot extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_bot);
 
-        // Initialize Markwon
         markwon = Markwon.create(this);
 
-        // Initialize views
         chatInputEditText = findViewById(R.id.chatInputEditText);
         chatRecyclerView = findViewById(R.id.chatRecyclerView);
         sendChatButton = findViewById(R.id.sendChatButton);
@@ -64,10 +62,8 @@ public class ChatBot extends AppCompatActivity {
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatRecyclerView.setAdapter(chatAdapter);
 
-        // Add a welcome message
         chatAdapter.addMessage("Hello! How can I help you today?", false);
 
-        // Set click listener for send button
         sendChatButton.setOnClickListener(v -> sendChatMessage());
     }
 
@@ -78,34 +74,26 @@ public class ChatBot extends AppCompatActivity {
             return;
         }
 
-        // Add user message to chat
         chatAdapter.addMessage(userMessage, true);
 
-        // Scroll to the bottom
         chatRecyclerView.scrollToPosition(chatAdapter.getItemCount() - 1);
 
-        // Clear input
         chatInputEditText.setText("");
 
-        // Show loading indicator
         loadingProgressBar.setVisibility(View.VISIBLE);
 
-        // Send message to API
         sendMessageToAPI(userMessage);
     }
 
     private void sendMessageToAPI(String userMessage) {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        // Create JSON body for the API request
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("model", "deepseek/deepseek-chat");
 
-            // Create messages array
             JSONArray messagesArray = new JSONArray();
 
-            // Add system message to get more structured, comprehensive responses
             JSONObject systemMessage = new JSONObject();
             systemMessage.put("role", "system");
             systemMessage.put("content", "You are a helpful assistant that provides comprehensive and structured information. " +
@@ -115,16 +103,14 @@ public class ChatBot extends AppCompatActivity {
                     "Format your response with clear sections and a logical flow of information.");
             messagesArray.put(systemMessage);
 
-            // Add user message
             JSONObject messageObject = new JSONObject();
             messageObject.put("role", "user");
             messageObject.put("content", userMessage);
             messagesArray.put(messageObject);
 
             jsonBody.put("messages", messagesArray);
-            jsonBody.put("max_tokens", 800); // Significantly increased to get more content
+            jsonBody.put("max_tokens", 800);
 
-            // Add additional parameters for better responses
             jsonBody.put("temperature", 0.7);
             jsonBody.put("top_p", 1);
 
@@ -145,20 +131,16 @@ public class ChatBot extends AppCompatActivity {
                         try {
                             Log.d("API Response", "Response: " + response.toString());
 
-                            // Hide loading indicator
                             loadingProgressBar.setVisibility(View.GONE);
 
-                            // Extract the AI's response
                             String aiMessage = response
                                     .getJSONArray("choices")
                                     .getJSONObject(0)
                                     .getJSONObject("message")
                                     .getString("content");
 
-                            // Add the AI's response to the chat
                             chatAdapter.addMessage(aiMessage, false);
 
-                            // Scroll to the bottom
                             chatRecyclerView.scrollToPosition(chatAdapter.getItemCount() - 1);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -169,33 +151,28 @@ public class ChatBot extends AppCompatActivity {
                         }
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Hide loading indicator
-                        loadingProgressBar.setVisibility(View.GONE);
+                error -> {
+                    loadingProgressBar.setVisibility(View.GONE);
 
-                        if (error.networkResponse != null) {
-                            Log.e("API Error", "Status Code: " + error.networkResponse.statusCode);
-                            if (error.networkResponse.data != null) {
-                                try {
-                                    String errorResponse = new String(error.networkResponse.data);
-                                    Log.e("API Error", "Error response: " + errorResponse);
-                                    Toast.makeText(ChatBot.this, "API Error: " + errorResponse, Toast.LENGTH_SHORT).show();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                    if (error.networkResponse != null) {
+                        Log.e("API Error", "Status Code: " + error.networkResponse.statusCode);
+                        if (error.networkResponse.data != null) {
+                            try {
+                                String errorResponse = new String(error.networkResponse.data);
+                                Log.e("API Error", "Error response: " + errorResponse);
+                                Toast.makeText(ChatBot.this, "API Error: " + errorResponse, Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } else {
-                            Log.e("API Error", "Error: " + error.getMessage());
-                            Toast.makeText(ChatBot.this, "Error communicating with AI: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
+                    } else {
+                        Log.e("API Error", "Error: " + error.getMessage());
+                        Toast.makeText(ChatBot.this, "Error communicating with AI: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
         ) {
             @Override
             public Map<String, String> getHeaders() {
-                // Add API key to headers
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Authorization", "Bearer " + API_KEY);
                 headers.put("Content-Type", "application/json");
@@ -203,7 +180,6 @@ public class ChatBot extends AppCompatActivity {
             }
         };
 
-        // Add the request to the queue
         requestQueue.add(jsonObjectRequest);
     }
 }
