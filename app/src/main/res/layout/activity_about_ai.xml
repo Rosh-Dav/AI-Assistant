@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back"
+    tools:context=".AboutAI">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="16dp">
+
+    <!-- App Logo -->
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="16dp"
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="OneAI Logo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- App Name -->
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="OneAI"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/appLogo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- App Version -->
+    <TextView
+        android:id="@+id/appVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Version 1.0.0"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/appName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- App Description Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/descriptionCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#33000000"
+        app:layout_constraintTop_toBottomOf="@id/appVersion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="About OneAI"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="OneAI is a comprehensive AI assistant designed to make your life easier. With advanced natural language processing and multiple capabilities, OneAI helps you with daily tasks and a lot more."
+            android:textSize="16sp"
+            android:textColor="@android:color/white" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Features Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/featuresCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#33000000"
+        app:layout_constraintTop_toBottomOf="@id/descriptionCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Features"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+
+        <!-- AI Chatbot -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+          <ImageView
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:src="@android:drawable/ic_dialog_info"
+              app:tint="@android:color/white"
+              android:contentDescription="Chat Icon" />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AI Chatbot"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Engage in natural conversations with our AI assistant powered by advanced language models."
+                android:textSize="14sp"
+                android:textColor="@android:color/white" />
+          </LinearLayout>
+        </LinearLayout>
+
+        <!-- Transcribe -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+          <ImageView
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:src="@android:drawable/ic_menu_edit"
+              app:tint="@android:color/white"
+              android:contentDescription="Transcribe Icon" />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Transcribe"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Convert speech to text accurately with our advanced transcription technology."
+                android:textSize="14sp"
+                android:textColor="@android:color/white" />
+          </LinearLayout>
+        </LinearLayout>
+
+        <!-- Math Operations -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+          <ImageView
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:src="@android:drawable/ic_dialog_dialer"
+              app:tint="@android:color/white"
+              android:contentDescription="Math Icon" />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mathematical Operations"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Solve complex mathematical problems and equations with ease."
+                android:textSize="14sp"
+                android:textColor="@android:color/white" />
+          </LinearLayout>
+        </LinearLayout>
+
+        <!-- Language Translation -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+          <ImageView
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:src="@android:drawable/ic_menu_sort_by_size"
+              app:tint="@android:color/white"
+              android:contentDescription="Translation Icon" />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Language Translation"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Translate between Hindi and English with accurate and contextual translations."
+                android:textSize="14sp"
+                android:textColor="@android:color/white" />
+          </LinearLayout>
+        </LinearLayout>
+
+        <!-- SMS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+          <ImageView
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:src="@android:drawable/ic_dialog_email"
+              app:tint="@android:color/white"
+              android:contentDescription="SMS Icon" />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Send SMS"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Send text messages directly from the app with voice commands or text input."
+                android:textSize="14sp"
+                android:textColor="@android:color/white" />
+          </LinearLayout>
+        </LinearLayout>
+
+        <!-- Email -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+          <ImageView
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:src="@android:drawable/ic_dialog_email"
+              app:tint="@android:color/white"
+              android:contentDescription="Email Icon" />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Send Email"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Compose and send emails effortlessly with intelligent suggestions."
+                android:textSize="14sp"
+                android:textColor="@android:color/white" />
+          </LinearLayout>
+        </LinearLayout>
+
+        <!-- Weather Updates -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+          <ImageView
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:src="@android:drawable/ic_menu_compass"
+              app:tint="@android:color/white"
+              android:contentDescription="Weather Icon" />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Weather Updates"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get detailed weather information for any location with voice commands."
+                android:textSize="14sp"
+                android:textColor="@android:color/white" />
+          </LinearLayout>
+        </LinearLayout>
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Developer Info Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/developerCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#33000000"
+        app:layout_constraintTop_toBottomOf="@id/featuresCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Developer"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical">
+
+          <ImageView
+              android:layout_width="48dp"
+              android:layout_height="48dp"
+              android:src="@drawable/ic_developer"
+              android:contentDescription="Developer Icon" />
+
+          <TextView
+              android:id="@+id/developerName"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:text="Your Name"
+              android:textSize="18sp"
+              android:textStyle="bold"
+              android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/developerInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Android Developer passionate about AI and machine learning technologies."
+            android:textSize="16sp"
+            android:textColor="@android:color/white" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Links Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/linksCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#33000000"
+        app:layout_constraintTop_toBottomOf="@id/developerCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Connect &amp; Contribute"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+
+        <!-- GitHub -->
+        <LinearLayout
+            android:id="@+id/githubLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp">
+
+          <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:src="@drawable/ic_github"
+              android:contentDescription="GitHub Icon" />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:text="GitHub Repository"
+              android:textSize="16sp"
+              android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <!-- Email -->
+        <LinearLayout
+            android:id="@+id/emailLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp">
+
+          <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:src="@android:drawable/ic_dialog_email"
+              app:tint="@android:color/white"
+              android:contentDescription="Email Icon" />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:text="Contact Developer"
+              android:textSize="16sp"
+              android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <!-- Report Issues -->
+        <LinearLayout
+            android:id="@+id/issuesLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp">
+
+          <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:src="@android:drawable/ic_dialog_alert"
+              app:tint="@android:color/white"
+              android:contentDescription="Issues Icon" />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:text="Report Issues"
+              android:textSize="16sp"
+              android:textColor="@android:color/white" />
+        </LinearLayout>
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

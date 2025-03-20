@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LanguageTranslationActivity"
+    android:padding="16dp"
+    android:background="@drawable/back">
+
+    <!-- Title with Icon -->
+    <LinearLayout
+        android:id="@+id/titleContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Translator"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <!-- Language Selection -->
+    <LinearLayout
+        android:id="@+id/languageSelectionContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/titleContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/sourceLanguageText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="English"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="8dp"/>
+
+        <ImageButton
+            android:id="@+id/swapLanguagesButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/baseline_compare_arrows_24"
+            android:background="?selectableItemBackgroundBorderless"
+            app:tint="@color/white"
+            android:layout_marginHorizontal="8dp"/>
+
+        <TextView
+            android:id="@+id/targetLanguageText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hindi"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="8dp"/>
+    </LinearLayout>
+
+    <!-- Source Language Text Input -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/inputCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#33FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/languageSelectionContainer"
+        android:layout_marginTop="16dp">
+
+        <EditText
+            android:id="@+id/inputText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter text in English"
+            android:textColorHint="#D3D3D3"
+            android:padding="16dp"
+            android:background="@android:color/transparent"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:gravity="start|top"
+            android:minHeight="120dp"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"/>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Target Language Output -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/outputCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#33FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/inputCard"
+        android:layout_marginTop="16dp">
+
+        <EditText
+            android:id="@+id/outputText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:hint="Translated text will appear here"
+            android:textColorHint="#D3D3D3"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@android:color/transparent"
+            android:gravity="start|top"
+            android:minHeight="120dp"
+            android:focusable="false"/>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:id="@+id/actionButtonsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/outputCard"
+        android:layout_marginTop="16dp">
+
+        <!-- Translate Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/translateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TRANSLATE"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:padding="14dp"
+            android:background="@drawable/button_background"
+            android:layout_marginBottom="16dp"/> <!-- Add margin to separate from the next buttons -->
+
+        <!-- Speak and Clear Buttons in a Horizontal Layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/voiceButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Speak"
+                android:textColor="@color/white"
+                android:drawableTint="@color/white"
+                android:paddingHorizontal="16dp"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:background="@drawable/button_background"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/clear_l"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Clear"
+                android:textColor="@color/white"
+                android:drawableTint="@color/white"
+                android:paddingHorizontal="16dp"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:background="@drawable/button_background"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

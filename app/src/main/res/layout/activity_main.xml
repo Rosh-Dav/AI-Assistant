@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back"
+    tools:context=".MainActivity">
+
+    <!-- Header with About Button -->
+    <ImageButton
+        android:id="@+id/imgViewOneAI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/baseline_info_24"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginEnd="16dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Main Content CardView -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="#33000000"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgViewOneAI">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- AI Chatbot Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/news_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_background"
+                android:padding="12dp"
+                android:text="One AI ChatBot"
+                android:textColor="#FFFFFF" />
+
+            <!-- Transcribe Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tts_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_background"
+                android:padding="12dp"
+                android:text="Transcribe"
+                android:textColor="#FFFFFF" />
+
+            <!-- Mathematical Operations Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/math_calculation_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_background"
+                android:padding="12dp"
+                android:text="Mathematical Operations"
+                android:textColor="#FFFFFF" />
+
+            <!-- Language Translation Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/language_translation_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_background"
+                android:padding="12dp"
+                android:text="Language Translation"
+                android:textColor="#FFFFFF" />
+
+            <!-- Send SMS Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/send_sms_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_background"
+                android:padding="12dp"
+                android:text="Send SMS"
+                android:textColor="#FFFFFF" />
+
+            <!-- Send Email Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/send_email_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_background"
+                android:padding="12dp"
+                android:text="Send Email"
+                android:textColor="#FFFFFF" />
+
+            <!-- Weather Updates Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/weather_update_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_background"
+                android:padding="12dp"
+                android:text="Weather Updates"
+                android:textColor="#FFFFFF" />
+
+            <!-- Voice Command Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <!-- Voice Command Button -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/voice_command_button"
+                    android:layout_width="90dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/button_background"
+                    android:text="Speak"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <!-- Command History Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/txtHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Command History:"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="#4DFFFFFF" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:backgroundTint="#33FFFFFF"
+                    android:background="@drawable/border">
+
+                    <TextView
+                        android:id="@+id/commandHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp" />
+                </ScrollView>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

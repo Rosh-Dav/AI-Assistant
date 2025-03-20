@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/transparent_button.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background color (transparent) -->
+    <solid android:color="@android:color/transparent"/>
+
+    <!-- Border color (white) and width -->
+    <stroke android:color="#FFFFFF" android:width="2dp"/>
+
+    <!-- Corner radius for rounded borders -->
+    <corners android:radius="8dp"/>
+
+    <!-- Optional: Add a shadow effect -->
+    <padding android:left="6dp" android:top="6dp" android:right="6dp" android:bottom="6dp"/>
+</shape>
