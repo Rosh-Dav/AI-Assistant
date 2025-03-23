@@ -14,11 +14,8 @@ import com.google.android.datatransport.backend.cct.BuildConfig;
 
 public class AboutAI extends AppCompatActivity {
 
-    // GitHub repository URL - Replace with your actual GitHub repo URL
     private static final String GITHUB_URL = "https://github.com/Rosh-Dav/AI-Assistant";
-    // Developer email
     private static final String DEVELOPER_EMAIL = "yadavisroshan0007@gmail.com";
-    // Issues URL - Usually points to the issues section of your GitHub repo
     private static final String ISSUES_URL = "https://github.com/Rosh-Dav/AI-Assistant";
 
     @Override
@@ -26,23 +23,19 @@ public class AboutAI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_ai);
 
-        // Initialize app version from BuildConfig
         TextView appVersionTextView = findViewById(R.id.appVersion);
         appVersionTextView.setText("Version " + BuildConfig.VERSION_NAME);
 
-        // Initialize developer information
         TextView developerNameTextView = findViewById(R.id.developerName);
-        developerNameTextView.setText("Roshan and Team"); // Replace with your name
+        developerNameTextView.setText("Roshan and Team");
 
         TextView developerInfoTextView = findViewById(R.id.developerInfo);
-        developerInfoTextView.setText("Android Developer"); // Customize as needed
+        developerInfoTextView.setText("Android Developer");
 
-        // Set click listeners for links
         setLinkClickListeners();
     }
 
     private void setLinkClickListeners() {
-        // GitHub repository link
         LinearLayout githubLink = findViewById(R.id.githubLink);
         githubLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +44,6 @@ public class AboutAI extends AppCompatActivity {
             }
         });
 
-        // Email contact link
         LinearLayout emailLink = findViewById(R.id.emailLink);
         emailLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +52,6 @@ public class AboutAI extends AppCompatActivity {
             }
         });
 
-        // Issues reporting link
         LinearLayout issuesLink = findViewById(R.id.issuesLink);
         issuesLink.setOnClickListener(new View.OnClickListener() {
             @Override

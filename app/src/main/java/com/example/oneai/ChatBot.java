@@ -57,8 +57,7 @@ public class ChatBot extends AppCompatActivity {
         loadingProgressBar = findViewById(R.id.loadingProgressBar);
         headerText = findViewById(R.id.headerText);
 
-        // Setup RecyclerView with adapter
-        chatAdapter = new ChatAdapter(markwon); // Pass Markwon to the adapter
+        chatAdapter = new ChatAdapter(markwon);
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatRecyclerView.setAdapter(chatAdapter);
 

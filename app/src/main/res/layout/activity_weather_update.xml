@@ -150,6 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="monospace"
+                android:textIsSelectable="true"
                 android:text="Weather details will appear here:"
                 android:textSize="16sp"
                 android:textColor="@android:color/white"

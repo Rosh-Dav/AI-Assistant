@@ -6,13 +6,17 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.Manifest;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,11 +27,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_SPEECH_INPUT = 1;
     private static final int REQUEST_CODE_NOTE_CONTENT = 2;
-    private static final int REQUEST_STORAGE_PERMISSION = 3;
+    private static final int PERMISSION_REQUEST_CODE = 100;
 
     private String pendingNoteTimestamp;
     private TextView commandHistory;
@@ -44,6 +49,35 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer = new MediaPlayer();
 
         initializeButtons();
+        requestPermissions();
+    }
+
+    private void requestPermissions() {
+        String[] permissions = new String[] {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.SEND_SMS,
+                Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.RECORD_AUDIO,
+        };
+
+        List<String> permissionsToRequest = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission);
+            }
+        }
+
+        if (!permissionsToRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    permissionsToRequest.toArray(new String[0]),
+                    PERMISSION_REQUEST_CODE);
+        }
     }
 
     private void initializeButtons() {
